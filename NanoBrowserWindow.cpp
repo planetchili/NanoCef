@@ -23,7 +23,7 @@ LRESULT CALLBACK BrowserWindowWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 		CefWindowInfo info;
 		info.SetAsChild(hWnd, cefRect);
 
-		CefBrowserHost::CreateBrowser(info, pClient, "https://youtube.com"s, {}, {}, {});
+		CefBrowserHost::CreateBrowser(info, pClient, "http://disk/index.html"s, {}, {}, {});
 		break;
 	}
 	case WM_SIZE:

@@ -140,6 +140,8 @@
     <ClInclude Include="NanoBrowserWindow.h" />
     <ClInclude Include="NanoCefApp.h" />
     <ClInclude Include="NanoCefClient.h" />
+    <ClInclude Include="NanoFileResourceHandler.h" />
+    <ClInclude Include="NanoFileSchemeHandlerFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
