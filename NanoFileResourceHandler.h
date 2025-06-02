@@ -17,7 +17,7 @@ public:
         handleRequest = true;
         CefURLParts urlParts;
         CefParseURL(pRequest->GetURL(), urlParts);
-        const auto path = std::filesystem::path{ CefString(&urlParts.path).ToString() }.relative_path();
+        const auto path = "dist" / std::filesystem::path{CefString(&urlParts.path).ToString()}.relative_path();
         // file size is needed later to populate the response header when requested
         fileSize_ = (int64_t)std::filesystem::file_size(path);
         // extension is needed later for mime type in the response headers

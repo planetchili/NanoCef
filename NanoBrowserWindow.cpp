@@ -23,7 +23,7 @@ LRESULT CALLBACK BrowserWindowWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 		CefWindowInfo info;
 		info.SetAsChild(hWnd, cefRect);
 
-		CefBrowserHost::CreateBrowser(info, pClient, "http://disk/index.html"s, {}, {}, {});
+		CefBrowserHost::CreateBrowser(info, pClient, "http://localhost:5173/"s, {}, {}, {});
 		break;
 	}
 	case WM_SIZE:
