@@ -22,7 +22,10 @@ public:
         fileSize_ = (int64_t)std::filesystem::file_size(path);
         // extension is needed later for mime type in the response headers
         auto ext = path.extension().string();
-        ext.erase(std::remove(ext.begin(), ext.end(), '.'), ext.end());
+        // we need to strip the leading '.'
+        if (ext.starts_with('.')) {
+            ext.erase(0, 1);
+        }
         if (!ext.empty()) {
             fileMimeType_ = CefGetMimeType(ext);
         }
