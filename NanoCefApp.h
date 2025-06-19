@@ -51,25 +51,26 @@ public:
         invocation.task = std::async([this, text = argPtrs[0]->GetStringValue().ToString(), id] {
             const auto ret = MessageBoxA(nullptr, text.c_str(),
                 "henlo", MB_SYSTEMMODAL | MB_ICONQUESTION | MB_YESNOCANCEL);
-            CefPostTask(TID_RENDERER, base::BindOnce(&NanoCefApp::ResolveDoChili_,
-                id, ret == IDYES, ret == IDCANCEL ? "CAN"s : ""s, std::ref(invocations_)
+            CefPostTask(TID_RENDERER, base::BindOnce(&NanoCefApp::ResolveDoChili_, this,
+                id, ret == IDYES, ret == IDCANCEL ? "CAN"s : ""s
             ));
         });
         return true;
     }
 
 private:
-    static void ResolveDoChili_(uint32_t id, bool yesno, std::string exception, std::unordered_map<uint32_t, Invocation_>& invocations)
+    void ResolveDoChili_(uint32_t id, bool yesno, std::string exception)
     {
-        auto& invocation = invocations[id];
+        auto& invocation = invocations_[id];
         invocation.pV8Context->Enter();
         if (!exception.empty()) {
-            invocations[id].pReject->ExecuteFunction({}, CefV8ValueList{ CefV8Value::CreateString(exception) });
+            invocation.pReject->ExecuteFunction({}, CefV8ValueList{ CefV8Value::CreateString(exception) });
         }
         else {
-            invocations[id].pAccept->ExecuteFunction({}, CefV8ValueList{ CefV8Value::CreateBool(yesno) });
+            invocation.pAccept->ExecuteFunction({}, CefV8ValueList{ CefV8Value::CreateBool(yesno) });
         }
         invocation.pV8Context->Exit();
+        invocations_.erase(id);
     }
 
     uint32_t nextInvocationId_ = 0;
