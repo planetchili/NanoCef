@@ -40,18 +40,20 @@ function removeItem(i: number) {
 const grandTotal = computed(() =>
   entries.value.reduce((sum, entry) => sum + entry.item.price * entry.quantity, 0)
 )
-const mb = ref<boolean|null>(null)
+const mb = ref('null')
 function doit() {
   interface ChilApi {
-    doChili(text: string): boolean;
+    doChili(
+      text: string,
+      accept: (result: boolean) => void,
+      reject: (msg: string) => void,
+    ): void;
   }
   const chilApi = window as unknown as ChilApi;
-  try {
-    mb.value = chilApi.doChili("ayyyyyy lmao")
-  }
-  catch (e) {
-    mb.value = null
-  }
+  chilApi.doChili("ayyyyyy lmao",
+    btn => { mb.value = btn ? 'YES' : 'NO' },
+    msg => mb.value = msg
+  )
 }
 </script>
 
@@ -108,7 +110,7 @@ function doit() {
         </div>
         <div class="d-flex justify-end">
           <v-btn color="green" @click="doit">AYY</v-btn>
-          <p class="price">${{ mb ? 'YES' : mb !== null ? 'NO' : 'null' }}</p>
+          <p class="price">{{ mb }}</p>
         </div>
       </v-container>
     </v-main>
