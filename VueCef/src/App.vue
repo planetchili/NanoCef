@@ -18,19 +18,25 @@ const inProgress = ref(false)
 // computed data
 const powerLevelNorm = computed(() => powerLevel.value ?? 0)
 // functions
-function quest(text: string): Promise<void> {
-  return doChili(text).then((btn) => {powerLevel.value = btn ? <number>powerLevel.value + 1 : <number>powerLevel.value})
+async function quest(text: string): Promise<void> {
+  powerLevel.value = await doChili(text) ? <number>powerLevel.value + 1 : <number>powerLevel.value
 }
-function doit() {
+async function doit() {
   inProgress.value = true
   powerLevel.value = 0
-  quest("Do you often find it hard to read or predict what other people are thinking or feeling?")
-  .then(() => quest("Do changes to your daily routine or environment frequently cause you significant distress?"))
-  .then(() => quest("Do you prefer to focus deeply on specific interests or topics, sometimes to the exclusion of other activities?"))
-  .then(() => quest("Do you find making or maintaining eye contact uncomfortable or avoid it whenever possible?"))
-  .then(() => quest("Do you often take things very literally and have difficulty understanding figures of speech, jokes, or sarcasm?"))
-  .catch(() => powerLevel.value = null)
-  .finally(() => inProgress.value = false)
+  try {
+    await quest("Do you often find it hard to read or predict what other people are thinking or feeling?")
+    await quest("Do changes to your daily routine or environment frequently cause you significant distress?")
+    await quest("Do you prefer to focus deeply on specific interests or topics, sometimes to the exclusion of other activities?")
+    await quest("Do you find making or maintaining eye contact uncomfortable or avoid it whenever possible?")
+    await quest("Do you often take things very literally and have difficulty understanding figures of speech, jokes, or sarcasm?")
+  }
+  catch {
+    powerLevel.value = null
+  }
+  finally {
+    inProgress.value = false
+  }
 }
 </script>
 
